@@ -30,9 +30,9 @@
 # -----------------------------------------------------------------------
 
 import sys
-import multiprocessing
+# import multiprocessing
 import time
-import random
+# import random
 import traceback
 import logging
 from datetime import datetime
@@ -57,7 +57,13 @@ class Executor:
         start = r.startBenchmark()
         debug = logging.getLogger().isEnabledFor(logging.DEBUG)
 
-        while (time.time() - start) <= duration:
+	# SROE
+	# 10 minutes have around 344 transactions
+	count = 0
+        # while (time.time() - start) <= duration:
+	while count < duration:
+	    # SROE
+	    count = count + 1
             txn, params = self.doOne()
             txn_id = r.startTransaction(txn)
             
@@ -77,7 +83,6 @@ class Executor:
             
             r.stopTransaction(txn_id)
         ## WHILE
-            
         r.stopBenchmark()
         return (r)
     ## DEF

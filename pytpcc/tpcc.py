@@ -34,7 +34,7 @@ import re
 import argparse
 import glob
 import time 
-import multiprocessing
+# import multiprocessing
 from ConfigParser import SafeConfigParser
 from pprint import pprint,pformat
 
@@ -161,7 +161,7 @@ def executorFunc(driverClass, scaleParameters, args, config, debug):
     config['execute'] = True
     config['reset'] = False
     driver.loadConfig(config)
-
+    
     e = executor.Executor(driver, scaleParameters, stop_on_error=args['stop_on_error'])
     driver.executeStart()
     results = e.execute(args['duration'])
@@ -265,5 +265,6 @@ if __name__ == '__main__':
         assert results
         print results.show(load_time)
     ## IF
-    
+    # SROE
+    quit()
 ## MAIN

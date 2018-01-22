@@ -38,12 +38,14 @@ import uuid
 import constants
 from java.lang import Integer, Float, String
 from org.apache.hadoop.hbase import HBaseConfiguration, HTableDescriptor, HColumnDescriptor
-from org.apache.hadoop.hbase.client import HBaseAdmin, HTable, Put, Get, Scan, Delete, Result, ResultScanner
+from org.apache.hadoop.hbase.client import HBaseAdmin, Put, Get, Scan, Delete, Result, ResultScanner
 from org.apache.hadoop.hbase.util import Bytes
 from org.apache.hadoop.hbase.filter import PrefixFilter
 from abstractdriver import AbstractDriver
 from pprint import pprint,pformat
 
+### SROE
+from pt.inescid.gsd.cachemining import HTable
 
 ## ==============================================
 ## HBase Tables Layout
@@ -214,7 +216,8 @@ SCANNER_CACHING = 100
 ## turn off auto flushing for PUT
 AUTOFLUSH = False
 ## in-mem column family 
-DATA_IN_MEM = True
+### SROE: original value was True
+DATA_IN_MEM = False
 
 ## ==============================================
 ## HBaseDriver
@@ -687,6 +690,27 @@ class HbaseDriver(AbstractDriver):
         self.order_line_tbl.close()
         self.item_tbl.close()
         self.stock_tbl.close()
+
+
+    # SROE copied from abstract driver
+    def executeTransaction(self, txn, params):
+        """Execute a transaction based on the given name"""
+        
+	self.new_order_tbl.markTransaction()
+
+        if constants.TransactionTypes.DELIVERY == txn:
+            result = self.doDelivery(params)
+        elif constants.TransactionTypes.NEW_ORDER == txn:
+            result = self.doNewOrder(params)
+        elif constants.TransactionTypes.ORDER_STATUS == txn:
+            result = self.doOrderStatus(params)
+        elif constants.TransactionTypes.PAYMENT == txn:
+            result = self.doPayment(params)
+        elif constants.TransactionTypes.STOCK_LEVEL == txn:
+            result = self.doStockLevel(params)
+        else:
+            assert False, "Unexpected TransactionType: " + txn
+        return result
 
     ## ==============================================
     ## doDelivery

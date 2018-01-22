@@ -32,6 +32,8 @@
 import random
 import nurand
 
+random.seed(300)
+
 SYLLABLES = [ "BAR", "OUGHT", "ABLE", "PRI", "PRES", "ESE", "ANTI", "CALLY", "ATION", "EING" ]
 
 nurandVar = None # NURand
