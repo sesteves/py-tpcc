@@ -1,0 +1,1 @@
+java -jar spmf.jar run VMSP in.txt result 0.01 15 1
